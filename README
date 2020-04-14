@@ -1,0 +1,18 @@
+The heap uses a free list that the free blocks are added with a minimally minblocksize.
+
+The heap checker checks if every block in the free list is marked as free, and if all free blocks
+are coalesced. It also checks if every block in bounds of the heap. It checks if the header and the
+footers are matched. And it checks if the first block in the heap is the prologue and the last block
+is the epilogue.
+
+The realloc function at first checks the two arguments and returns NULL when bad cases occurs.
+It then checks if the argument (re-allocate) size is larger or smaller than the size of the
+block (original size). If the original memory has a greater size than or equal to the size
+requested, my function returns a pointer to the block's payload. Otherwise, my function tries
+to coalesce the block with its neighbor free blocks to get the enough space. If it could not
+get enough space, it does malloc to get more space and I have to copy the data into the new
+region and move the original block.
+
+In the mm_malloc function, when there's no free blocks, in order to reduce calls to extend heap,
+I used a more_space variable, compares it with the size that requested, and use the larger one
+to be the size to extend the heap.
